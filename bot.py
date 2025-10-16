@@ -32,7 +32,9 @@ async def create_calendar_event(channel, title, date, time, duration):
     """Helper function to create calendar event and thread"""
     try:
         start = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
-        end = start + timedelta(minutes=int(duration))
+        # Convert hours to minutes for timedelta
+        duration_minutes = int(float(duration) * 60)
+        end = start + timedelta(minutes=duration_minutes)
         
         event = {
             "summary": title,
@@ -55,7 +57,7 @@ async def create_calendar_event(channel, title, date, time, duration):
 # Text command (renamed to avoid conflict)
 @bot.command(name="createevent")
 async def text_event(ctx, title: str, date: str, time: str, duration: str):
-    """Text command: !createevent "Title" YYYY-MM-DD HH:MM duration"""
+    """Text command: !createevent "Title" YYYY-MM-DD HH:MM duration_in_hours"""
     await ctx.send("⏳ Creating event...")
     try:
         link, thread = await create_calendar_event(ctx.channel, title, date, time, duration)
@@ -69,7 +71,7 @@ async def text_event(ctx, title: str, date: str, time: str, duration: str):
     title="Event title",
     date="Date in YYYY-MM-DD format",
     time="Time in HH:MM format (24h)",
-    duration="Duration in minutes"
+    duration="Duration in hours (e.g., 1.5 for 1 hour 30 minutes)"
 )
 @app_commands.guilds(discord.Object(id=GUILD_ID))  # Guild-specific command
 async def slash_event(
