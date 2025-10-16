@@ -5,10 +5,12 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from datetime import datetime, timedelta
 import os
+from dotenv import load_dotenv
 
 print(f"🐍 Discord.py: {discord.__version__}")
 
 # 🔒 SECURITY: Use environment variables instead!
+load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")  # Set this in your environment
 GUILD_ID = 1427177908023197738
 CALENDAR_ID = "c639975ea536b3e98ba755a41c6304599125de557f50df142206f1270897f793@group.calendar.google.com"
